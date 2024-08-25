@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>GSPose</title>
+
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Place favicon.ico in the root directory -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.css">
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.3/clipboard.min.js"></script>
+    <script src="js/app.js"></script>
+</head>
+
+<body>
+    <div class="container" id="main">
+        <div class="row">
+            <h2 class="col-md-12 text-center">
+                <b>GS-Pose: Category-Level Object Pose Estimation via Geometric and Semantic Correspondence</b> <br>
+                <small>
+                    ECCV - 2024
+                </small>
+            </h2>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <ul class="list-inline">
+                    <li>
+                        <a href="">
+                            Pengyuan Wang <sup>1</sup>
+                        </a>,
+                        <a href="">
+                         Takuya Ikeda <sup>2</sup>
+                        </a>,
+                        <a href="">
+                        Robert Lee <sup>2</sup>
+                        </a>,
+                        <a href="">
+                      Koichi Nishiwaki <sup>2</sup>
+                        </a>,
+                        </br>
+                        1. Technical University of Munich
+                        2. Woven by Toyota
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+                <div class="col-md-4 col-md-offset-4 text-center">
+                    <ul class="nav nav-pills nav-justified">
+                        <li>
+                            <a href="https://arxiv.org/abs/2403.10683">
+                            <image src="img/paper.png" height="60px">
+                                <h4><strong>Paper</strong></h4>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                            <image src="img/code.png" height="60px">
+                                <h4><strong>Code</strong></h4>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+        </div>
+
+                <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    Abstract
+                </h3>
+                <center> <image style='height: 100%; width: 100%; text-align:center' src="img/teaser1.png"
+                                class="img-responsive" alt="overview" class="center" /> </center>   <br>
+                <p class="text-justify">
+    Category-level pose estimation is a challenging task with many potential applications in computer vision and robotics. Recently,
+    deep-learning-based approaches have made great progress, but are typically hindered by the need for large datasets of
+    either pose-labelled real images or carefully tuned photorealistic simulators.
+    This can be avoided by using only geometry inputs such as depth images to reduce the domain-gap but these approaches
+    suffer from a lack of semantic information, which can be vital in the pose estimation problem. To resolve this conflict,
+    we propose to utilize both geometric and semantic features obtained from a pre-trained foundation model. Our approach
+    projects 2D semantic features into object models as 3D semantic point clouds. Based on the novel 3D representation, we
+    further propose a self-supervision pipeline, and match the fused semantic point clouds against their synthetic rendered
+    partial observations from synthetic object models.  The learned knowledge from synthetic data generalizes to observations of
+    unseen objects in the real scenes, without any fine-tuning. We demonstrate this with a rich evaluation on the NOCS, Wild6D and
+    SUN RGB-D benchmarks, showing superior performance over geometric-only and semantic-only baselines with significantly fewer
+    training objects.
+                </p>
+            </div>
+        </div>
+
+
+            <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                  Method
+                </h3>
+                <center> <image style='height: 100%; width: 100%; text-align:center' src="img/teaser2.png"
+                                class="img-responsive" alt="overview" class="center" /> </center>   <br>
+                <p class="text-justify">
+    Overview of semantic and geometric feature embedding. Different from other synthetic-only pose estimation pipelines,
+    our method incorporates both geometric and semantic features to improve performance. (1) Firstly, we sample camera
+    poses around the synthetic object CAD model with 2D RGB-D image renderings. (2) Afterwards, we fuse 2D semantic
+    features from rendered RGB image to 3D point clouds as 3D semantic features. Specially, we project each point to the
+    visible 2D observations and extract the 2D semantic feature on the projected image location. As an object point can
+    be observed from multiple views, we calculate the average over the observed features and get a smooth representation.
+    We directly use the 3D object point coordinates as geometric features and combine them with fused semantic features
+    as the matching network inputs.
+                </p>
+                <br>
+            </div>
+        </div>
+
+            <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <center> <image style='height: 100%; width: 100%; text-align:center' src="img/teaser3.png"
+                                class="img-responsive" alt="overview" class="center" /> </center>   <br>
+                <p class="text-justify">
+    Overview of our matching network. Left: For matching between a semantic point cloud and the RGB-D input, we
+    firstly extract 2D semantic features from the RGB image and back-project the semantic features with the depth image
+    as a partial input point cloud. We then uniformly sample 3000 points from the semantic point cloud and 1000 points
+    from partial input point cloud for the matching.  The normalized point coordinates are embedded  as geometric features
+    with positional encoding and added with semantic features.  The embedded features are fused with self- and
+    cross-attention layers for multiple iterations in a transformer network for global perceptions. The assignment matrix
+    is calculated based on the cosine similarity of the fused point features. Right: To disambiguate the symmetrical poses,
+    (1) Since multiple ground truth poses can exist for axis-symmetry objects, (2) the Ground Truth (GT) pose is constrained
+    to intersect the object xz-plane with the camera origin coordinate system.
+                </p>
+            </div>
+        </div>
+
+
+         <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                   Citation
+                </h3>
+                <p class="text-justify">
+                    <pre><code>@inproceedings{gspose, title={GS-Pose: Category-Level Object Pose Estimation via Geometric and Semantic Correspondence}, author={Pengyuan Wang, Takuya Ikeda, Robert Lee, Koichi Nishiwaki}, year={2024}</code></pre>
+                </p>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    Acknowledgements
+                </h3>
+                The website template was borrowed from <a href="http://mgharbi.com/">Michaël Gharbi</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
