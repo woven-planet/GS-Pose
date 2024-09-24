@@ -1,0 +1,4 @@
+work_dir: ${hydra:runtime.cwd}
+print_config: true
+seed: 12345
+HYDRA_FULL_ERROR: 1

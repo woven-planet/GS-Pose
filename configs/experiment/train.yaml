@@ -1,0 +1,157 @@
+# @package _global_
+
+
+dataset_path: 'data/shapenet'
+train_datasource: 'shapenet'
+
+seed: 12345
+train_cat: 'camera'
+exp_name: ${train_cat}
+type: train
+pretrained_ckpt: null
+feature_type: 'dino'
+keypoint_encoding_dim: 384
+enable_symmetry: True
+train_obj_num: 10
+train_epoch: 200
+
+trainer:
+    _target_: pytorch_lightning.Trainer
+    gpus:
+        - 0
+    num_nodes: 1
+    accelerator: 'ddp'
+    min_epochs: ${train_epoch}
+    max_epochs: ${train_epoch}
+    gradient_clip_val: 0.5
+    accumulate_grad_batches: 4
+    weights_summary: full
+    num_sanity_val_steps: 0 # 0 means no sanity check, -1 means use all val data for sanity check
+    check_val_every_n_epoch: 10
+    log_every_n_steps: 10
+    flush_logs_every_n_steps: 1
+
+model:
+  _target_: src.lightning_model.gspose_lightning.PL_GsPose
+  GsPose:
+    feature_type: ${feature_type}
+    keypoints_encoding:
+      enable: True
+      type: mlp_linear
+      descriptor_dim: ${keypoint_encoding_dim}
+      keypoints_encoder: [32, 64, 128]
+      norm_method: "instancenorm"
+
+    dino_attention:
+      'input_dim': ${keypoint_encoding_dim}  # input descriptor dimension (autoselected from weights)
+      'descriptor_dim': 256
+      'n_layers': 9
+      'num_heads': 4
+      'flash': True  # enable FlashAttention if available.
+      'mp': False  # enable mixed precision
+      'width_confidence': 0.99  # point pruning, disable with -1
+      'filter_threshold': 0.1  # match threshold
+      'weights': None
+
+    matching:
+      type: "dual-softmax"
+      thr: 0.1
+      feat_norm_method: "sqrt_feat_dim"
+      border_rm: 2
+      dual_softmax:
+        temperature: 0.08
+      train:
+        train_padding: True # Good to be true
+        train_coarse_percent: 0.3 # save GPU memory
+        train_pad_num_gt_min: 200 # avoid deadlock; better convergence
+
+    loss:
+      coarse_type: 'focal'
+      coarse_weight: 1.0
+      fine_type: "l2_with_std"
+      fine_weight: 0.81
+
+      # Config for coarse
+      focal_alpha: 0.5
+      focal_gamma: 2.0
+      pos_weight: 1.0
+      neg_weight: 1.0
+
+      # smooth_l1_with_std
+      fine_smooth_l1_beta: 1.0
+      fine_loss_weight: 1.0
+      fine_correct_thr: 1.0
+
+  trainer:
+    enable_plotting: False
+    canonical_bs: 4
+    canonical_lr: 5e-5
+    scaling: null
+    world_size: null
+    n_val_pairs_to_plot: 100
+
+    # Optimizer
+    optimizer: "adamw" # ['adam', 'adamw']
+    true_lr: null
+    adam_decay: 0.
+    adamw_decay: 0.01
+
+    # Scheduler
+    scheduler: "MultiStepLR"
+    scheduler_invervel: "epoch"
+    mslr_milestones: [1000]
+    mslr_gamma: 0.5
+    cosa_tmax: 30
+    warmup_epochs: 10
+    elr_gamma: 0.999992
+
+  match_type: "softmax"
+
+
+datamodule:
+    _target_: src.datamodules.ShapeNet_datamodule.ShapeNetDataModule
+    dataset_path: ${dataset_path}
+
+    train_datasource: ${train_datasource}
+    train_obj_num: ${train_obj_num}
+    train_cat: ${train_cat}
+    enable_symmetry: ${enable_symmetry}
+    augmentor_method: null
+    module_sample_num: 3000
+    input_sample_num: 1000
+
+    batch_size: 4
+    num_workers: 4
+    pin_memory: True
+    train_percent: 1.0
+    val_percent: 0.1
+
+
+callbacks:
+    model_checkpoint:
+      _target_: pytorch_lightning.callbacks.ModelCheckpoint
+      monitor: null
+      save_top_k: 1
+      save_last: True
+      mode: "max"
+      dirpath: "${work_dir}/models/checkpoints/${exp_name}"
+      filename: '{epoch}'
+    lr_monitor:
+        _target_: pytorch_lightning.callbacks.LearningRateMonitor
+        logging_interval: 'epoch'
+
+logger:
+    tensorboard:
+        _target_: pytorch_lightning.loggers.TensorBoardLogger
+        save_dir: '${work_dir}/logs'
+        name: ${exp_name}
+        default_hp_metric: False
+
+    neptune:
+        tags: ["best_model"]
+    csv_logger:
+        save_dir: "."
+
+hydra:
+    run:
+      dir: ${work_dir}
