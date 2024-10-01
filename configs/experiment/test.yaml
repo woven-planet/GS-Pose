@@ -9,9 +9,7 @@ exp_name: ${train_cat}
 feature_type: 'dino'
 keypoint_encoding_dim: 384
 type: test
-#pretrained_ckpt: 'data/pretrained_networks/${train_cat}/last.ckpt'
-pretrained_ckpt: 'data/checkpoints_train_200/${train_cat}/best.ckpt'
-#pretrained_ckpt: '/drive/projects1/FC6D-10-26-modified/models/checkpoints_ablation1/${train_cat}/epoch=189.ckpt'
+pretrained_ckpt: 'data/pretrained_networks/${train_cat}/last.ckpt'
 enable_symmetry: True
 
 test:

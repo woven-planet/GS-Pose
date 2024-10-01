@@ -17,15 +17,12 @@ import pickle
 from tqdm import tqdm
 from ctypes import *
 import time
-
 import torch
-
 
 import matplotlib.pyplot as plt
 import math
 from box import Box
 from iou import IoU
-
 
 typename2shapenetid = {
     'chair': '03001627',
@@ -35,7 +32,6 @@ typename2shapenetid = {
     'sofa': '04256520',
     'table': '04379243'
 }
-
 
 def convert_layers(model, layer_type_old, layer_type_new, convert_weights=False):
     for name, module in reversed(model._modules.items()):

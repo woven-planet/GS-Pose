@@ -1,10 +1,9 @@
-
 """
     Codes are modified from
-    https://github.com/zju3dv/OnePose_Plus_Plus
+    https://github.com/zju3dv/OnePose_Plus_Plus/
+    under Apache-2.0 license http://www.apache.org/licenses/
 """
 
-# pytorch lightning imports
 import pytorch_lightning as pl
 
 # hydra imports

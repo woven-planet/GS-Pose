@@ -1,6 +1,7 @@
 """
     Codes are modified from
-    https://github.com/zju3dv/OnePose_Plus_Plus/tree/main
+    https://github.com/zju3dv/OnePose_Plus_Plus/
+    under Apache-2.0 license http://www.apache.org/licenses/
 """
 
 

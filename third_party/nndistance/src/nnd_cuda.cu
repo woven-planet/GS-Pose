@@ -1,9 +1,12 @@
+//  MIT License
+// Copyright (c) 2017 Fei Xia
+// Permission is granted to use, copy, modify, merge, publish, and distribute this software.
+// The software is provided "as is", without warranty of any kind.
+// For more details, see the full license https://opensource.org/license/MIT.
+
 #include <stdio.h>
-//#include "nnd_cuda.h"
 #include <torch/torch.h>
 #include <vector>
-
-
 
 __global__ void NmDistanceKernel(int b,int n,const float * xyz,int m,const float * xyz2,float * result,int * result_i){
 	const int batch=512;

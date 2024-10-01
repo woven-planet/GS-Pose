@@ -1,6 +1,5 @@
-# GS-Pose: Category-Level Object Pose Estimation via Geometric and Semantic Correspondence 
+# GS-Pose: Category-Level Object Pose Estimation via Geometric and Semantic Correspondence
 
-## Overview
 ![teaser](assets/teaser.png "")
 
 The paper and github pages are available:
@@ -49,18 +48,28 @@ python train_gspose.py +experiment=train.yaml ++train_cat='camera'
 python train_gspose.py +experiment=test.yaml ++train_cat='camera'
 ~~~
 
-## Third Party 
-### nndistance
-we modify the chamfer distance function  in third_party/nndistance from https://github.com/fxia22/pointGAN/tree/master/nndistance.
-### transformer backbone 
-we modify the transformer backbone in src/models/transformer_module from the https://github.com/cvg/LightGlue repo.
+## License
+The [Apache License 2.0](https://github.tri-ad.tech/robotics/GS-Pose/blob/main/LICENSE) in our repo is applied except the codes below.
 
-## Ackledgement
-We thank the respective authors of
-* https://github.com/fxia22/pointGAN/tree/master/nndistance
-* https://github.com/cvg/LightGlue, https://github.com/zju3dv/OnePose_Plus_Plus
-* https://github.com/facebookresearch/dinov2
-* https://github.com/qq456cvb/CPPF
+* **pointGAN**: the codes in the `third_party/nndistance` folder are modified 
+from homepage [Link](https://github.com/fxia22/pointGAN) under MIT License [Link](https://github.com/fxia22/pointGAN/blob/master/LICENSE). 
+* **CPPF**: the codes in the `eval` folder are modified
+from homepage [Link](https://github.com/qq456cvb/CPPF) under 
+MIT License [Link](https://github.com/qq456cvb/CPPF/blob/main/LICENSE). 
+* **LightGlue**: the codes in the `src/models/transformer_module` folder
+are modified from homepage [Link](https://github.com/cvg/LightGlue) under 
+Apache-2.0 License [Link](https://github.com/cvg/LightGlue?tab=Apache-2.0-1-ov-file). 
+* **ONEPosePlus**: the code in the `training_gspose.py` and `src/models/optimizers` folder are modified
+from homepage [Link](https://github.com/zju3dv/OnePose_Plus_Plus) under 
+Apache-2.0 License [Link](https://github.com/zju3dv/OnePose_Plus_Plus?tab=Apache-2.0-1-ov-file). 
+* **NOCS**: the code in `src/utils/umeyama_scale.py` is modified from homepage [Link](https://github.com/hughw19/NOCS_CVPR2019?tab=readme-ov-file) under 
+MIT License [Link](https://github.com/hughw19/NOCS_CVPR2019?tab=License-1-ov-file#readme). 
+* **DINOv2**: the dinov2 foundation model is from homepage [Link](https://github.com/facebookresearch/dinov2) under 
+Apache-2.0 License [Link](https://github.com/facebookresearch/dinov2?tab=Apache-2.0-1-ov-file). 
 
-for their open source code.
+
+## Acknowledgement
+
+We thank the above projects and corresponding authors for their opensource codes.
+
 

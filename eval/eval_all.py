@@ -1,8 +1,13 @@
+# MIT License
+# Copyright (c) 2022 Yang You
+# Permission is granted to use, copy, modify, merge, publish, and distribute this software.
+# The software is provided "as is", without warranty of any kind.
+# For more details, see the full license https://opensource.org/license/MIT.
+
 """
     Evaluation-related codes are modified from
     https://github.com/qq456cvb/CPPF
 """
-
 
 import argparse
 import glob
@@ -12,7 +17,6 @@ import pickle
 import numpy as np
 from util import compute_degree_cm_mAP
 from scipy.spatial.transform import Rotation
-
 
 synset_names = ['BG',  # 0
                 'bottle',  # 1

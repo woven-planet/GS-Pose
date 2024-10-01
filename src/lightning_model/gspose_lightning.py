@@ -39,20 +39,7 @@ class PL_GsPose(pl.LightningModule):
         else:
             self.matcher = GsPoseModel(self.hparams["FC6D"])
             self.thr = self.hparams["FC6D"]['matching']['thr']
-            '''
-            test_info = {
-                'test_dataset': 'data/nocs',
-                'result_path': 'data/shapenet',
-                'test_cat': ${train_cat},
-            }
-            '''
-        '''
-        self.n_vals_plot = max(
-            self.hparams["trainer"]["n_val_pairs_to_plot"]
-            // self.hparams["trainer"]["world_size"],
-            1,
-        )
-        '''
+
         self.chamfer_dist = NNDModule()
         dinov2_vit = torch.hub.load('facebookresearch/dinov2', 'dinov2_vits14')
         self.dino_model = dinov2_vit.cuda().eval()

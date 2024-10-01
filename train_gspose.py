@@ -1,8 +1,8 @@
 """
     Codes are modified from
-    https://github.com/zju3dv/OnePose_Plus_Plus
+    https://github.com/zju3dv/OnePose_Plus_Plus/
+    under Apache-2.0 license http://www.apache.org/licenses/
 """
-
 
 from pytorch_lightning import LightningModule, Callback, Trainer
 from pytorch_lightning import seed_everything
@@ -109,11 +109,9 @@ def train(config: DictConfig):
     if optimized_metric:
         return trainer.callback_metrics[optimized_metric]
 
-
 @hydra.main(config_path="configs/", config_name="config.yaml")
 def main(config: DictConfig):
     return train(config)
-
 
 if __name__ == "__main__":
     main()

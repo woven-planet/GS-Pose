@@ -1,7 +1,8 @@
-"""
-    Umeyama codes are modified from
-    https://github.com/hughw19/NOCS_CVPR2019
-"""
+# MIT License
+# Copyright (c) 2019 He Wang, Srinath Sridhar, Jingwei Huang, Julien Valentin, Shuran Song, Leonidas J. Guibas from Stanford, Google, Princeton and FAIR
+# Permission is granted to use, copy, modify, merge, publish, and distribute this software.
+# The software is provided "as is", without warranty of any kind.
+# For more details, see the full license https://opensource.org/license/MIT.
 
 import numpy as np
 import torch
